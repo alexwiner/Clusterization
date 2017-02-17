@@ -19,7 +19,6 @@ namespace Clusterisation
         }
         public void ReadFile()
         {
-           
             openFileDialog1.ShowDialog();
             StreamReader reader = new StreamReader(openFileDialog1.FileName);
             string[] element;
@@ -33,17 +32,21 @@ namespace Clusterisation
                 Patient obj = new Patient(i, parametr_parient, i);
                 i++;
             }
-            
-
         }
         private void button1_Click(object sender, EventArgs e)
         {
             ReadFile();
-            Output_data();
         }
-        void Output_data()
+        double Euclid(List<double> first_params,List<double> second_params)
         {
-           
+            double distans=0;
+            int i = 0;
+            while (i < first_params.Count())
+            {
+                distans += Math.Pow((first_params[i] - second_params[i]),2.0);
+                i++;
+            }
+            return Math.Sqrt(distans);
         }
         private void button2_Click(object sender, EventArgs e)
         {
