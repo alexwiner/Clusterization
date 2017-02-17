@@ -12,29 +12,28 @@ namespace Clusterisation
 {
     public partial class Main_Form : Form
     {
-        List<double>[] data;
-        double list_length;
+        List<Patient> data;
         public Main_Form()
         {
             InitializeComponent();
         }
         public void ReadFile()
         {
-            List<double>[] datastring = new List<double>[90];
+           
             openFileDialog1.ShowDialog();
             StreamReader reader = new StreamReader(openFileDialog1.FileName);
-            int i = 0;
             string[] element;
+            int i = 0;   
             while (!reader.EndOfStream)
             {
+                List<double> parametr_parient = new List<double>();
                 element = reader.ReadLine().Split('\t');
-                datastring[i] = new List<double>();
                 for (int j = 0; j < element.Length; j++)
-                    datastring[i].Add(Convert.ToDouble(element[j]));
+                    parametr_parient.Add(Convert.ToDouble(element[j]));
+                Patient obj = new Patient(i, parametr_parient, i);
                 i++;
-                list_length = element.Length;
             }
-            data = datastring;
+            
 
         }
         private void button1_Click(object sender, EventArgs e)
@@ -44,15 +43,7 @@ namespace Clusterisation
         }
         void Output_data()
         {
-            for (int i = 0; i < 90; i++)
-            {
-                chart1.Series.Add("s"+i);
-                chart1.Series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-                for (int j = 0; j < list_length; j++)
-                {
-                    chart1.Series[i].Points.AddXY(j, data[i][j]);
-                }
-            }
+           
         }
         private void button2_Click(object sender, EventArgs e)
         {
