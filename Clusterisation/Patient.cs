@@ -11,7 +11,7 @@ namespace Clusterisation
         int Id;
         List<double> Parameters;
         int Cluster;
-        Patient(int id,List<double>parameters,int cluster)
+        public Patient(int id,List<double>parameters,int cluster)
         {
             Id = id;
             Parameters = parameters;
