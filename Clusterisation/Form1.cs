@@ -12,41 +12,62 @@ namespace Clusterisation
 {
     public partial class Main_Form : Form
     {
-        List<Patient> data;
+        List<Patient> data = new List<Patient>();
         public Main_Form()
         {
             InitializeComponent();
         }
         public void ReadFile()
         {
+            List<Patient> d = new List<Patient>();
             openFileDialog1.ShowDialog();
             StreamReader reader = new StreamReader(openFileDialog1.FileName);
             string[] element;
             int i = 0;   
             while (!reader.EndOfStream)
             {
-                List<double> parametr_parient = new List<double>();
+                List<double> parametr_patient = new List<double>();
                 element = reader.ReadLine().Split('\t');
                 for (int j = 0; j < element.Length; j++)
-                    parametr_parient.Add(Convert.ToDouble(element[j]));
-                Patient obj = new Patient(i, parametr_parient, i);
+                    parametr_patient.Add(Convert.ToDouble(element[j]));
+                Patient obj = new Patient(i, parametr_patient, i);
+                d.Add(obj);
                 i++;
             }
+            data = d;
         }
         private void button1_Click(object sender, EventArgs e)
         {
             ReadFile();
+            double[,] m = Distance_matrix();
+            for (int i = 0; i < data.Count(); i++)
+                for (int j = 0; j < data.Count(); j++)
+                {
+                    m[i, j]; 
+                }
+
+
+        }
+        double[,] Distance_matrix()
+        {
+            double[,] matrix = new double[data.Count(), data.Count()];
+            for (int i = 0; i < data.Count(); i++)
+                for (int j = 0; j < data.Count(); j++)
+                {
+                    matrix[i, j] = Euclid(data[i].Parameters, data[j].Parameters);
+                }
+            return matrix;
         }
         double Euclid(List<double> first_params,List<double> second_params)
         {
-            double distans=0;
+            double distance=0;
             int i = 0;
             while (i < first_params.Count())
             {
-                distans += Math.Pow((first_params[i] - second_params[i]),2.0);
+                distance += Math.Pow((first_params[i] - second_params[i]),2.0);
                 i++;
             }
-            return Math.Sqrt(distans);
+            return Math.Sqrt(distance);
         }
         private void button2_Click(object sender, EventArgs e)
         {

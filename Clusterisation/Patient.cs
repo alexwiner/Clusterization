@@ -8,9 +8,9 @@ namespace Clusterisation
 {
     class Patient
     {
-        int Id;
-        List<double> Parameters;
-        int Cluster;
+        public int Id;
+        public List<double> Parameters;
+        public int Cluster;
         public Patient(int id,List<double>parameters,int cluster)
         {
             Id = id;
