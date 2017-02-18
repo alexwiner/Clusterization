@@ -39,18 +39,71 @@ namespace Clusterisation
         private void button1_Click(object sender, EventArgs e)
         {
             ReadFile();
-            double[,] m = Distance_matrix();
-            for (int i = 0; i < data.Count(); i++)
-                for (int j = 0; j < data.Count(); j++)
+            List<List<int>> m = Clusterisation_func();
+            for (int i = 0; i < m.Count(); i++)
+            {
+                string s="";
+                for (int j = 0; j < data.Count; j++)
                 {
-                    m[i, j]; 
+                    s += m[i][j] + "\t";
                 }
-
-
+                listBox1.Items.Add(s);
+            }
         }
-        double[,] Distance_matrix()
+        List<List<int>> Clusterisation_func()
         {
-            double[,] matrix = new double[data.Count(), data.Count()];
+            double [,] matrix = Distance_matrix();
+            double minimum = 10000;
+            int x = 0, y = 0;
+            List<List<int>> cluster_matrix = new List<List<int>>();
+            List<int> cl = new List<int>();
+            for (int i = 0; i < data.Count(); i++)  
+                cl.Add(data[i].Cluster);
+            cluster_matrix.Add(new List<int>(cl));
+
+            ///start
+            while (true)
+            {
+                minimum = 10000;
+                int k = 0;
+                for (int i = 0; i < data.Count(); i++)
+                    for (int j = 0; j < data.Count(); j++)
+                    {
+                        if ((matrix[i, j] < minimum) && (matrix[i, j] > 0))
+                        {
+                            minimum = matrix[i, j];
+                            x = i;
+                            y = j;
+                            k++;
+                        }
+                    }
+
+                if (k == 0)
+                    return cluster_matrix;
+
+                List<int> clust = new List<int>();
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    if (data[i].Cluster == data[y].Cluster)
+                        data[i].Cluster = data[x].Cluster;
+                    clust.Add(data[i].Cluster);
+                }
+                cluster_matrix.Add(new List<int>(clust));
+
+                for (int i = 0; i < data.Count(); i++)
+                    for (int j = 0; j < data.Count(); j++)
+                        if (data[i].Cluster == data[j].Cluster)
+                            matrix[i, j] = 0;
+                for (int i = 0; i < data.Count(); i++)
+                    for (int j = 0; j < data.Count(); j++)
+                        if (matrix[i, j] == 0)
+                            data[i].Cluster = data[j].Cluster;
+                       
+            }
+        }
+        double [,] Distance_matrix()
+        { 
+            double [,] matrix = new double[data.Count(), data.Count()];
             for (int i = 0; i < data.Count(); i++)
                 for (int j = 0; j < data.Count(); j++)
                 {
@@ -72,6 +125,11 @@ namespace Clusterisation
         private void button2_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
